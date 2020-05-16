@@ -1,0 +1,26 @@
+{
+    "name": "nav-server",
+    "version": "1.0.0",
+    "description": "导航项目接口服务",
+    "main": "app.js",
+    "scripts": {
+        "start": "nodemon ./app.js"
+    },
+    "keywords": [
+        "node",
+        "server"
+    ],
+    "author": "tom",
+    "license": "MIT",
+    "dependencies": {
+        "@koa/multer": "^2.0.2",
+        "jsonwebtoken": "^8.5.1",
+        "koa": "^2.11.0",
+        "koa-bodyparser": "^4.3.0",
+        "koa-cors": "^0.0.16",
+        "koa-router": "^8.0.8",
+        "koa-static": "^5.0.0",
+        "mongoose": "^5.9.13",
+        "multer": "^1.4.2"
+    }
+}
