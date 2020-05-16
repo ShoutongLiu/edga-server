@@ -9,10 +9,10 @@
 const multer = require('@koa/multer');//加载koa-multer模块
 const router = require('koa-router')()
 const Banner = require('../model/banner')
-
+const path = require('path')
+const fs = require('fs');
 
 const host = 'http://'
-let filePath = ''
 
 const getData = (name) => {
     const target = Banner.find({ filename: name }, (err, data) => {
@@ -25,12 +25,29 @@ const getData = (name) => {
     return target
 }
 // banner上传
-const uploadImg = (path) => {
+const uploadImg = (filepath) => {
+
     // 上传 Banner图片
     let storage = multer.diskStorage({
-        //文件保存路径
-        destination: function (req, file, cb) {
-            cb(null, 'static/' + path)
+        destination: async (req, file, cb) => {
+            // 判断是否有文件夹，没有新建
+            const static = (path.join(__dirname, '../static/'))
+            const fileLoad = (path.join(__dirname, '../static/' + filepath))
+            const isHas = await fs.existsSync(fileLoad)
+            const isStatic = await fs.existsSync(static)
+            if (!isStatic) {
+                fs.mkdirSync(path.join(__dirname, '../static/'), (err) => {
+                    console.log(err, '-----');
+                });
+            }
+            if (!isHas) {
+                fs.mkdirSync(fileLoad, (err) => {
+                    console.log(err, '-----');
+                });
+            }
+
+            //文件保存路径
+            cb(null, 'static/' + filepath)
         },
         //修改文件名称
         filename: function (req, file, cb) {
