@@ -8,25 +8,13 @@
  */
 const multer = require('@koa/multer');//加载koa-multer模块
 const router = require('koa-router')()
-const Banner = require('../model/banner')
 const path = require('path')
 const fs = require('fs');
 
 const host = 'http://'
 
-const getData = (name) => {
-    const target = Banner.find({ filename: name }, (err, data) => {
-        if (err) {
-            console.log(err);
-            return
-        }
-        return data
-    })
-    return target
-}
 // banner上传
 const uploadImg = (filepath) => {
-
     // 上传 Banner图片
     let storage = multer.diskStorage({
         destination: async (req, file, cb) => {
@@ -57,32 +45,14 @@ const uploadImg = (filepath) => {
     })
     //加载配置
     let upload = multer({
-        storage: storage,
-        // 查询数据库，已经存在的图片不存储
-        fileFilter: async (req, file, cb) => {
-            let target = await getData(file.originalname)
-            if (target.length === 0) {
-                cb(null, true)
-            } else {
-                cb(null, false)
-            }
-        }
+        storage: storage
     });
     return upload
 }
 
 
 router.post('/banner', uploadImg('banners').single('file'), async (ctx, next) => {
-    let path = ''
-    if (ctx.request.file) {
-        path = host + ctx.header.host + '/banners/' + ctx.request.file.filename
-    } else {
-        ctx.body = {
-            code: 20000,
-            data: { isUpload: true }
-        }
-        return
-    }
+    const path = host + ctx.header.host + '/banners/' + ctx.request.file.filename
     ctx.body = {
         code: 20000,
         data: { filename: path }

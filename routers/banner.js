@@ -11,7 +11,7 @@ router.get('/get', async (ctx, next) => {
             return
         }
         return data
-    })
+    }).sort({ _id: -1 })
     ctx.body = {
         code: 20000,
         data: {
@@ -22,6 +22,7 @@ router.get('/get', async (ctx, next) => {
 
 
 router.post('/add', async (ctx, next) => {
+    console.log(ctx.request.body);
     const { url, path, filename } = ctx.request.body
     let banner = new Banner({
         url,
@@ -37,7 +38,8 @@ router.post('/add', async (ctx, next) => {
     ctx.body = {
         code: 20000,
         data: {
-            isAdd: true
+            isAdd: true,
+            time: Date.now()
         }
     }
 })
