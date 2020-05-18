@@ -59,13 +59,17 @@ router.post('/banner', uploadImg('banners').single('file'), async (ctx, next) =>
     }
 })
 
+router.post('/graph', uploadImg('graphs').single('file'), async (ctx, next) => {
+    const path = host + ctx.header.host + '/graphs/' + ctx.request.file.filename
+    ctx.body = {
+        code: 20000,
+        data: { filename: path }
+    }
+})
+
 // 头像上传
 router.post('/avatar', uploadImg('avatars').single('file'), async (ctx, next) => {
-    if (ctx.request.file.filename) {
-
-    }
     const path = host + ctx.header.host + '/avatars/' + ctx.request.file.filename
-
     ctx.body = {
         code: 20000,
         data: { filename: path }

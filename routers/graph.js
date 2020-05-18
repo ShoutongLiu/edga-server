@@ -1,12 +1,12 @@
 
 
 const router = require('koa-router')()
-const Banner = require('../model/banner')
+const Graph = require('../model/graph')
 const fs = require('fs')
 const path = require('path')
 
 router.get('/get', async (ctx, next) => {
-    let banners = await Banner.find({}, (err, data) => {
+    let graphs = await Graph.find({}, (err, data) => {
         if (err) {
             return
         }
@@ -15,7 +15,7 @@ router.get('/get', async (ctx, next) => {
     ctx.body = {
         code: 20000,
         data: {
-            banners: banners
+            graphs
         }
     }
 })
@@ -23,12 +23,12 @@ router.get('/get', async (ctx, next) => {
 
 router.post('/add', async (ctx, next) => {
     const { url, path, filename } = ctx.request.body
-    let banner = new Banner({
+    let graph = new Graph({
         url,
         path,
         filename
     })
-    await banner.save((err) => {
+    await graph.save((err) => {
         if (err) {
             console.log(err)
             return
@@ -46,11 +46,11 @@ router.post('/del', async (ctx, next) => {
     const { _id, url } = ctx.request.body
     const filename = url.split('/')[4]
     // 获取文件路径
-    const delPath = (path.join(__dirname, '../static')) + '/banners/' + filename
+    const delPath = (path.join(__dirname, '../static')) + '/graphs/' + filename
     // 删除本地数据
     fs.unlinkSync(delPath);
     // 删除数据库数据 
-    await Banner.deleteOne({ _id: _id }, (err) => {
+    await Graph.deleteOne({ _id: _id }, (err) => {
         if (err) {
             return
         }
