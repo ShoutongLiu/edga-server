@@ -23,13 +23,24 @@ router.post(`/add`, async (ctx) => {
 // 查找location接口
 router.post(`/get`, async (ctx) => {
     const page = ctx.request.body.page
-    const dataLocation = await Location.find((err, data) => {
-        if (err) {
-            console.log(err)
-            return
-        }
-        return data
-    }).sort({ _id: -1 }).skip((page - 1) * 10).limit(10)
+    let dataLocation = null
+    if (page === 0) {
+        dataLocation = await Location.find((err, data) => {
+            if (err) {
+                console.log(err)
+                return
+            }
+            return data
+        })
+    } else {
+        dataLocation = await Location.find((err, data) => {
+            if (err) {
+                console.log(err)
+                return
+            }
+            return data
+        }).sort({ _id: -1 }).skip((page - 1) * 10).limit(10)
+    }
     const count = await Location.find().countDocuments()
     ctx.body = {
         code: 20000,

@@ -67,7 +67,7 @@ router.post('/graph', uploadImg('graphs').single('file'), async (ctx, next) => {
     }
 })
 
-// 头像上传
+// 用户头像上传
 router.post('/avatar', uploadImg('avatars').single('file'), async (ctx, next) => {
     const path = host + ctx.header.host + '/avatars/' + ctx.request.file.filename
     ctx.body = {
@@ -75,6 +75,38 @@ router.post('/avatar', uploadImg('avatars').single('file'), async (ctx, next) =>
         data: { filename: path }
     }
 })
+
+// 企业头像上传
+router.post('/businessavatar', uploadImg('business').single('file'), async (ctx, next) => {
+    const path = host + ctx.header.host + '/business/' + ctx.request.file.filename
+    ctx.body = {
+        code: 20000,
+        data: { filename: path }
+    }
+})
+
+// 微信二维码图片上传
+router.post('/wxcode', uploadImg('wxcodes').single('file'), async (ctx, next) => {
+    const path = host + ctx.header.host + '/wxcodes/' + ctx.request.file.filename
+    ctx.body = {
+        code: 20000,
+        data: { filename: path }
+    }
+})
+
+// 多张图片上传
+router.post('/picture', uploadImg('pictures').single('file'), async (ctx, next) => {
+    let pathArr = []
+    const file = ctx.request.file
+    console.log(file);
+    const path = host + ctx.header.host + '/pictures/' + file.filename
+    pathArr.push(path)
+    ctx.body = {
+        code: 20000,
+        data: { filename: pathArr }
+    }
+})
+
 
 
 

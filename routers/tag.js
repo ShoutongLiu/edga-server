@@ -23,13 +23,25 @@ router.post(`/add`, async (ctx) => {
 // 查找tag接口
 router.post(`/get`, async (ctx) => {
     const page = ctx.request.body.page
-    const dataTag = await Tag.find((err, data) => {
-        if (err) {
-            console.log(err)
-            return
-        }
-        return data
-    }).sort({ _id: -1 }).skip((page - 1) * 10).limit(10)
+    let dataTag = null
+    if (page === 0) {
+        dataTag = await Tag.find((err, data) => {
+            if (err) {
+                console.log(err)
+                return
+            }
+            return data
+        })
+    } else {
+        dataTag = await Tag.find((err, data) => {
+            if (err) {
+                console.log(err)
+                return
+            }
+            return data
+        }).sort({ _id: -1 }).skip((page - 1) * 10).limit(10)
+    }
+
     const count = await Tag.find().countDocuments()
     ctx.body = {
         code: 20000,

@@ -23,13 +23,24 @@ router.post(`/add`, async (ctx) => {
 // 查找categroy接口
 router.post(`/get`, async (ctx) => {
     const page = ctx.request.body.page
-    const dataCategroy = await Categroy.find((err, data) => {
-        if (err) {
-            console.log(err)
-            return
-        }
-        return data
-    }).sort({ _id: -1 }).skip((page - 1) * 10).limit(10)
+    let dataCategroy = null
+    if (page === 0) {
+        dataCategroy = await Categroy.find((err, data) => {
+            if (err) {
+                console.log(err)
+                return
+            }
+            return data
+        })
+    } else {
+        dataCategroy = await Categroy.find((err, data) => {
+            if (err) {
+                console.log(err)
+                return
+            }
+            return data
+        }).sort({ _id: -1 }).skip((page - 1) * 10).limit(10)
+    }
     const count = await Categroy.find().countDocuments()
     ctx.body = {
         code: 20000,
