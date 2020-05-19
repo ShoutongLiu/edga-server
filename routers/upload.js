@@ -12,7 +12,7 @@ const path = require('path')
 const fs = require('fs');
 
 const host = 'http://'
-
+let pathArr = []
 // banner上传
 const uploadImg = (filepath) => {
     // 上传 Banner图片
@@ -96,14 +96,12 @@ router.post('/wxcode', uploadImg('wxcodes').single('file'), async (ctx, next) =>
 
 // 多张图片上传
 router.post('/picture', uploadImg('pictures').single('file'), async (ctx, next) => {
-    let pathArr = []
     const file = ctx.request.file
     console.log(file);
     const path = host + ctx.header.host + '/pictures/' + file.filename
-    pathArr.push(path)
     ctx.body = {
         code: 20000,
-        data: { filename: pathArr }
+        data: { filename: path }
     }
 })
 
