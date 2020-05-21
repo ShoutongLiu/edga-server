@@ -24,6 +24,23 @@ router.post('/get', async (ctx, next) => {
 })
 
 
+router.post('/update', async (ctx, next) => {
+    const res = ctx.request.body
+    await Content.updateOne({ _id: res._id }, res, (err) => {
+        if (err) {
+            console.log(err)
+            return
+        }
+    })
+    ctx.body = {
+        code: 20000,
+        data: {
+            isUpdate: true
+        }
+    }
+})
+
+
 router.post('/add', async (ctx, next) => {
     const res = ctx.request.body
     console.log(res);
