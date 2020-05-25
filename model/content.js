@@ -19,7 +19,7 @@ let contentSchema = mongoose.Schema({
     behance: String,
     facebook: String,
     skiile: Array,
-    categroyVal: Array,
+    categroyVal: String,
     locationVal: Array,
     tagVal: Array,        // 选中的值
     activeTime: Array,

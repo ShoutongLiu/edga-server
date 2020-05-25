@@ -43,7 +43,6 @@ router.post('/update', async (ctx, next) => {
 
 router.post('/add', async (ctx, next) => {
     const res = ctx.request.body
-    console.log(res);
     let content = new Content(res)
     await content.save((err) => {
         if (err) {
@@ -69,7 +68,6 @@ const delFile = (filepath, filename) => {
 
 router.post('/del', async (ctx, next) => {
     const { _id, avatarUrl, wxcode, pics } = ctx.request.body
-    console.log(ctx.request.body);
     if (avatarUrl) {
         const avatarname = avatarUrl.split('/')[4]
         if (avatarname.length > 2) {
