@@ -31,7 +31,7 @@ router.post(`/get`, async (ctx) => {
                 return
             }
             return data
-        })
+        }).sort({ _id: -1 })
     } else {
         dataCategroy = await Categroy.find((err, data) => {
             if (err) {

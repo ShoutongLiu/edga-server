@@ -7,12 +7,22 @@ const path = require('path')
 
 router.post('/get', async (ctx, next) => {
     const page = ctx.request.body.page
-    let contents = await Content.find({}, (err, data) => {
-        if (err) {
-            return
-        }
-        return data
-    }).sort({ _id: -1 }).skip((page - 1) * 10).limit(10)
+    let contents = []
+    if (page === 0) {
+        contents = await Content.find({}, (err, data) => {
+            if (err) {
+                return
+            }
+            return data
+        }).sort({ _id: -1 })
+    } else {
+        contents = await Content.find({}, (err, data) => {
+            if (err) {
+                return
+            }
+            return data
+        }).sort({ _id: -1 }).skip((page - 1) * 10).limit(10)
+    }
     const count = await Content.find().countDocuments()
     ctx.body = {
         code: 20000,

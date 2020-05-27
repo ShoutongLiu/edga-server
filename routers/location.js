@@ -31,7 +31,7 @@ router.post(`/get`, async (ctx) => {
                 return
             }
             return data
-        })
+        }).sort({ _id: -1 })
     } else {
         dataLocation = await Location.find((err, data) => {
             if (err) {
