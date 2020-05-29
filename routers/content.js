@@ -33,6 +33,45 @@ router.post('/get', async (ctx, next) => {
     }
 })
 
+/* 根据类别查询 */
+router.post('/cate', async (ctx, next) => {
+    const cate = ctx.request.body.cate
+    console.log(cate);
+    let contents = []
+    contents = await Content.find(cate, (err, data) => {
+        if (err) {
+            return
+        }
+        return data
+    }).sort({ _id: -1 })
+    ctx.body = {
+        code: 20000,
+        data: {
+            contents
+        }
+    }
+})
+
+
+/* 根据标签查询 */
+router.post('/tag', async (ctx, next) => {
+    const tag = ctx.request.body.tag
+    console.log(tag);
+    let contents = []
+    contents = await Content.find(tag, (err, data) => {
+        if (err) {
+            return
+        }
+        return data
+    }).sort({ _id: -1 })
+    ctx.body = {
+        code: 20000,
+        data: {
+            contents
+        }
+    }
+})
+
 
 router.post('/update', async (ctx, next) => {
     const res = ctx.request.body
