@@ -36,7 +36,6 @@ router.post('/get', async (ctx, next) => {
 /* 根据类别查询 */
 router.post('/cate', async (ctx, next) => {
     const cate = ctx.request.body.cate
-    console.log(cate);
     let contents = []
     contents = await Content.find(cate, (err, data) => {
         if (err) {
@@ -72,6 +71,26 @@ router.post('/tag', async (ctx, next) => {
     }
 })
 
+/* 根据公司名字查询 */
+router.post('/company', async (ctx, next) => {
+    const name = ctx.request.body.name
+    // 模糊查询
+    let reg = new RegExp(name, 'i'); //不区分大小写
+    let contents = []
+    contents = await Content.find({ companyName: { $regex: reg } }, (err, data) => {
+        if (err) {
+            return
+        }
+        return data
+    }).sort({ _id: -1 })
+    ctx.body = {
+        code: 20000,
+        data: {
+            contents
+        }
+    }
+})
+
 
 router.post('/update', async (ctx, next) => {
     const res = ctx.request.body
@@ -88,6 +107,23 @@ router.post('/update', async (ctx, next) => {
         }
     }
 })
+
+// 更新views字段
+// router.post('/update/view', async (ctx, next) => {
+//     const res = ctx.request.body
+//     await Content.update({ _id: res._id }, { $set: res.body, $inc: { views: + 1 } }, { multi: false }, (err) => {
+//         if (err) {
+//             console.log(err)
+//             return
+//         }
+//     })
+//     ctx.body = {
+//         code: 20000,
+//         data: {
+//             isUpdate: true
+//         }
+//     }
+// })
 
 
 router.post('/add', async (ctx, next) => {
