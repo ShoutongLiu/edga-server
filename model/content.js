@@ -28,7 +28,8 @@ let contentSchema = mongoose.Schema({
     pics: Array,
     views: Number,
     love: Number,
-    commitTime: Number
+    commitTime: Number,
+    surplusTime: Number
 })
 
 // 定义数据库模型，操作数据库, 默认与category复数的表相连接

@@ -5,18 +5,28 @@ const Content = require('../model/content')
 const fs = require('fs')
 const path = require('path')
 
+const addSurplusTime = (data) => {
+    data.forEach(v => {
+        let endTime = new Date(v.activeTime[1]).getTime()
+        let currentTime = new Date().getTime()
+        let surplusTime = endTime - currentTime
+        v.surplusTime = surplusTime
+    })
+    return data
+}
+
 router.post('/get', async (ctx, next) => {
     const page = ctx.request.body.page
-    let contents = []
+    let content = []
     if (page === 0) {
-        contents = await Content.find({}, (err, data) => {
+        content = await Content.find({}, (err, data) => {
             if (err) {
                 return
             }
             return data
         }).sort({ _id: -1 })
     } else {
-        contents = await Content.find({}, (err, data) => {
+        content = await Content.find({}, (err, data) => {
             if (err) {
                 return
             }
@@ -24,6 +34,7 @@ router.post('/get', async (ctx, next) => {
         }).sort({ _id: -1 }).skip((page - 1) * 10).limit(10)
     }
     const count = await Content.find().countDocuments()
+    contents = await addSurplusTime(content)
     ctx.body = {
         code: 20000,
         data: {
@@ -33,16 +44,19 @@ router.post('/get', async (ctx, next) => {
     }
 })
 
+
+
 /* 根据类别查询 */
 router.post('/cate', async (ctx, next) => {
     const cate = ctx.request.body.cate
-    let contents = []
-    contents = await Content.find(cate, (err, data) => {
+    let content = []
+    content = await Content.find(cate, (err, data) => {
         if (err) {
             return
         }
         return data
     }).sort({ _id: -1 })
+    contents = await addSurplusTime(content)
     ctx.body = {
         code: 20000,
         data: {
@@ -56,13 +70,14 @@ router.post('/cate', async (ctx, next) => {
 router.post('/tag', async (ctx, next) => {
     const tag = ctx.request.body.tag
     console.log(tag);
-    let contents = []
-    contents = await Content.find(tag, (err, data) => {
+    let content = []
+    content = await Content.find(tag, (err, data) => {
         if (err) {
             return
         }
         return data
     }).sort({ _id: -1 })
+    contents = await addSurplusTime(content)
     ctx.body = {
         code: 20000,
         data: {
@@ -76,13 +91,14 @@ router.post('/company', async (ctx, next) => {
     const name = ctx.request.body.name
     // 模糊查询
     let reg = new RegExp(name, 'i'); //不区分大小写
-    let contents = []
-    contents = await Content.find({ companyName: { $regex: reg } }, (err, data) => {
+    let content = []
+    content = await Content.find({ companyName: { $regex: reg } }, (err, data) => {
         if (err) {
             return
         }
         return data
     }).sort({ _id: -1 })
+    contents = await addSurplusTime(content)
     ctx.body = {
         code: 20000,
         data: {
@@ -107,23 +123,6 @@ router.post('/update', async (ctx, next) => {
         }
     }
 })
-
-// 更新views字段
-// router.post('/update/view', async (ctx, next) => {
-//     const res = ctx.request.body
-//     await Content.update({ _id: res._id }, { $set: res.body, $inc: { views: + 1 } }, { multi: false }, (err) => {
-//         if (err) {
-//             console.log(err)
-//             return
-//         }
-//     })
-//     ctx.body = {
-//         code: 20000,
-//         data: {
-//             isUpdate: true
-//         }
-//     }
-// })
 
 
 router.post('/add', async (ctx, next) => {
