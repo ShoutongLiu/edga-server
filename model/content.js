@@ -29,6 +29,7 @@ let contentSchema = mongoose.Schema({
     views: Number,
     love: Number,
     commitTime: Number,
+    loveTime: Number,
     surplusTime: Number
 })
 
