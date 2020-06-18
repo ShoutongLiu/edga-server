@@ -10,7 +10,7 @@ const multer = require('@koa/multer');//加载koa-multer模块
 const router = require('koa-router')()
 const path = require('path')
 const fs = require('fs');
-const host = 'http://'
+const host = 'https://'
 // banner上传
 const uploadImg = (filepath) => {
     // 上传 Banner图片
