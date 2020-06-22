@@ -10,7 +10,7 @@ const multer = require('@koa/multer');//加载koa-multer模块
 const router = require('koa-router')()
 const path = require('path')
 const fs = require('fs');
-const host = 'https://'
+const host = 'http://'
 // banner上传
 const uploadImg = (filepath) => {
     // 上传 Banner图片
@@ -96,6 +96,7 @@ router.post('/wxcode', uploadImg('wxcodes').single('file'), async (ctx, next) =>
 router.post('/picture', uploadImg('pictures').single('file'), async (ctx, next) => {
     const file = ctx.request.file
     const path = host + ctx.header.host + '/pictures/' + file.filename
+    console.log(path);
     ctx.body = {
         code: 20000,
         data: { filename: path }

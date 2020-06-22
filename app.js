@@ -17,7 +17,7 @@ var fs = require('fs');
 var enforceHttps = require('koa-sslify').default;
 const app = new Koa()
 
-app.use(enforceHttps());
+// app.use(enforceHttps());
 
 app.use(cors())
 // 使用ctx.body解析中间件
@@ -39,6 +39,10 @@ var options = {
 
 
 
-https.createServer(options, app.callback()).listen(3000, () => {
+// https.createServer(options, app.callback()).listen(3000, () => {
+//     console.log('服务启动');
+// })
+
+app.listen(3000, () => {
     console.log('服务启动');
 })
