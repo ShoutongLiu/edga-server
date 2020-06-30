@@ -32,10 +32,10 @@ app.use(static(
     path.join(__dirname, './static')
 ))
 
-var options = {
-    key: fs.readFileSync('./ssl/4083608_hangjia.egda.com.key'),  //ssl文件路径
-    cert: fs.readFileSync('./ssl/4083608_hangjia.egda.com.pem')  //ssl文件路径
-};
+// var options = {
+//     key: fs.readFileSync('./ssl/4083608_hangjia.egda.com.key'),  //ssl文件路径
+//     cert: fs.readFileSync('./ssl/4083608_hangjia.egda.com.pem')  //ssl文件路径
+// };
 
 
 
