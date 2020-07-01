@@ -2,7 +2,6 @@
 
 const router = require('koa-router')()
 const Content = require('../model/content')
-const Host = require('../model/host')
 const fs = require('fs')
 const path = require('path')
 
@@ -20,9 +19,6 @@ const addSurplusTime = (data) => {
 // 查询所有
 router.post('/get', async (ctx, next) => {
     const page = ctx.request.body.page
-    // 获取ip
-    let ip = ctx.request.ip.split(':')[3]
-    const ipArr = await findHost()
     let content = []
     if (page === 0) {
         content = await Content.find({}, (err, data) => {
@@ -41,15 +37,6 @@ router.post('/get', async (ctx, next) => {
     }
     const count = await Content.find().countDocuments()
     contents = await addSurplusTime(content)
-    // 判断是否存在
-    let isHas = ipArr.some(v => v.ip === ip)
-    if (!ipArr || ipArr.length === 0 || !isHas) {
-        await addHost({ ip })
-        contents.forEach(v => {
-            v.commitTime = 0
-            v.loveTime = 0
-        })
-    }
     ctx.body = {
         code: 20000,
         data: {
@@ -58,27 +45,6 @@ router.post('/get', async (ctx, next) => {
         }
     }
 })
-
-
-// 查询所有ip
-const findHost = () => {
-    let host = Host.find({}, (err, data) => {
-        if (err) {
-            return
-        }
-        return data
-    })
-    return host
-}
-
-const addHost = (ip) => {
-    let host = new Host(ip)
-    host.save(err => {
-        if (err) {
-            return
-        }
-    })
-}
 
 
 /* 根据类别查询 */
