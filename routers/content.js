@@ -51,7 +51,46 @@ router.post('/get', async (ctx, next) => {
 router.post('/cate', async (ctx, next) => {
     const cate = ctx.request.body.cate
     let content = []
-    content = await Content.find(cate, (err, data) => {
+    content = await Content.find({ 'categroyVal.name': cate.name }, (err, data) => {
+        if (err) {
+            return
+        }
+        return data
+    }).sort({ _id: -1 })
+    contents = await addSurplusTime(content)
+    ctx.body = {
+        code: 20000,
+        data: {
+            contents
+        }
+    }
+})
+
+/* 根据位置查询 */
+router.post('/location', async (ctx, next) => {
+    const location = ctx.request.body.location
+    let content = []
+    content = await Content.find({ 'locationVal.name': { $eq: location.name } }, (err, data) => {
+        if (err) {
+            return
+        }
+        return data
+    }).sort({ _id: -1 })
+    contents = await addSurplusTime(content)
+    ctx.body = {
+        code: 20000,
+        data: {
+            contents
+        }
+    }
+})
+
+
+/* 根据擅长查询 */
+router.post('/skill', async (ctx, next) => {
+    const skill = ctx.request.body.skill
+    let content = []
+    content = await Content.find({ 'skiile.name': { $eq: skill.name } }, (err, data) => {
         if (err) {
             return
         }
@@ -70,9 +109,8 @@ router.post('/cate', async (ctx, next) => {
 /* 根据标签查询 */
 router.post('/tag', async (ctx, next) => {
     const tag = ctx.request.body.tag
-    console.log(tag);
     let content = []
-    content = await Content.find(tag, (err, data) => {
+    content = await Content.find({ 'tagVal.name': { $eq: tag.name } }, (err, data) => {
         if (err) {
             return
         }
